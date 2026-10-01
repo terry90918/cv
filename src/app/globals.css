@@ -181,13 +181,6 @@
   [data-slot='select-item'] {
     @apply cursor-pointer!;
   }
-  html.custom-cursor-active,
-  html.custom-cursor-active * {
-    @apply cursor-none!;
-  }
-  html.custom-cursor-active [data-custom-cursor] {
-    @apply block!;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

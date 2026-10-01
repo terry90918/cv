@@ -4,7 +4,6 @@ import localFont from 'next/font/local'
 import { notFound } from 'next/navigation'
 
 import { ThemeProvider } from '@/components/theme-provider'
-import CustomCursor from '@/components/layout/custom-cursor'
 import EdgeBlur from '@/components/layout/edge-blur'
 import Footer from '@/components/layout/footer'
 import NavDock from '@/components/layout/nav-dock'
@@ -64,7 +63,6 @@ export default async function LocaleLayout({
             <Footer locale={locale} profile={profile} />
           </TooltipProvider>
           <EdgeBlur />
-          <CustomCursor />
         </ThemeProvider>
       </body>
     </html>

@@ -16,19 +16,18 @@
 
 // React Imports
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { RefObject } from 'react'
 
 // Third-party Imports
 import * as THREE from 'three'
 import { useTheme } from 'next-themes'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import type { ThreeEvent } from '@react-three/fiber'
-import { Environment, Lightformer, useGLTF, useTexture } from '@react-three/drei'
+import { Environment, Lightformer, useCursor, useGLTF, useTexture } from '@react-three/drei'
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint } from '@react-three/rapier'
 import type { RapierRigidBody, RigidBodyProps } from '@react-three/rapier'
 
 // Util Imports
-import { setIdCardHover } from '@/lib/id-card-cursor'
+import { getIdCardView } from '@/lib/id-card-view'
 import { cn } from '@/lib/utils'
 import { assetPath } from '@/lib/site'
 
@@ -188,9 +187,10 @@ const buildTaperedTubeGeometry = (
 type BandProps = {
   frontImage: string
   isMobile: boolean
+  touchDragEnabled: boolean
 }
 
-const Band = ({ frontImage, isMobile }: BandProps) => {
+const Band = ({ frontImage, isMobile, touchDragEnabled }: BandProps) => {
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
 
@@ -204,7 +204,6 @@ const Band = ({ frontImage, isMobile }: BandProps) => {
   const vec = new THREE.Vector3()
   const ang = new THREE.Vector3()
   const rot = new THREE.Vector3()
-  const dir = new THREE.Vector3()
   const cardQuat = new THREE.Quaternion()
 
   const segmentProps: RigidBodyProps = {
@@ -308,6 +307,39 @@ const Band = ({ frontImage, isMobile }: BandProps) => {
   })
 
   const [dragged, drag] = useState<THREE.Vector3 | false>(false)
+  const [hovered, setHovered] = useState(false)
+  const canvas = useThree(state => state.gl.domElement)
+  const activePointer = useRef<number | null>(null)
+  const dragPlane = useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), [])
+
+  useCursor(hovered && !dragged, 'grab', 'auto', canvas)
+  useCursor(Boolean(dragged), 'grabbing', 'auto', canvas)
+
+  useEffect(() => {
+    const endDrag = (event: PointerEvent) => {
+      if (event.pointerId !== activePointer.current) return
+      activePointer.current = null
+      drag(false)
+    }
+
+    const blur = () => {
+      const pointerId = activePointer.current
+
+      activePointer.current = null
+      drag(false)
+      if (pointerId !== null && canvas.hasPointerCapture(pointerId)) canvas.releasePointerCapture(pointerId)
+    }
+
+    canvas.addEventListener('pointercancel', endDrag)
+    canvas.addEventListener('lostpointercapture', endDrag)
+    window.addEventListener('blur', blur)
+
+    return () => {
+      canvas.removeEventListener('pointercancel', endDrag)
+      canvas.removeEventListener('lostpointercapture', endDrag)
+      window.removeEventListener('blur', blur)
+    }
+  }, [canvas])
 
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 0.85])
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 0.85])
@@ -319,11 +351,17 @@ const Band = ({ frontImage, isMobile }: BandProps) => {
 
   useFrame((state, delta) => {
     if (dragged) {
-      vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera)
-      dir.copy(vec).sub(state.camera.position).normalize()
-      vec.add(dir.multiplyScalar(state.camera.position.length()))
+      state.raycaster.setFromCamera(state.pointer, state.camera)
+      state.raycaster.ray.intersectPlane(dragPlane, vec)
+
+      const view = getIdCardView(state.size.width, state.size.height)
+
       ;[card, j1, j2, j3, fixed].forEach(ref => ref.current?.wakeUp())
-      card.current?.setNextKinematicTranslation({ x: vec.x - dragged.x, y: vec.y - dragged.y, z: vec.z - dragged.z })
+      card.current?.setNextKinematicTranslation({
+        x: THREE.MathUtils.clamp(vec.x - dragged.x, -view.halfWidth + 1.8, view.halfWidth - 1.8),
+        y: THREE.MathUtils.clamp(vec.y - dragged.y, -view.halfHeight + 3.5, view.halfHeight - 2),
+        z: 0
+      })
     }
 
     if (fixed.current) {
@@ -388,20 +426,22 @@ const Band = ({ frontImage, isMobile }: BandProps) => {
             scale={4}
             position={[0, -3.16, -0.09]}
             onPointerUp={(e: ThreeEvent<PointerEvent>) => {
+              if (e.pointerId !== activePointer.current) return
+              activePointer.current = null
+              e.stopPropagation()
               ;(e.target as Element).releasePointerCapture(e.pointerId)
               drag(false)
-              document.body.style.userSelect = ''
             }}
             onPointerDown={(e: ThreeEvent<PointerEvent>) => {
+              if (activePointer.current !== null || e.button !== 0 || (e.pointerType !== 'mouse' && !touchDragEnabled))
+                return
+              activePointer.current = e.pointerId
+              e.stopPropagation()
               ;(e.target as Element).setPointerCapture(e.pointerId)
               drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current!.translation())))
-
-              // Without this, dragging the card also triggers the browser's native
-              // text-selection drag on whatever it passes over.
-              document.body.style.userSelect = 'none'
             }}
-            onPointerOver={() => setIdCardHover(true)}
-            onPointerOut={() => setIdCardHover(false)}
+            onPointerOver={() => setHovered(true)}
+            onPointerOut={() => setHovered(false)}
           >
             <mesh geometry={nodes.card.geometry}>
               <meshBasicMaterial map={cardMap} toneMapped={false} />
@@ -470,30 +510,12 @@ const StudioLighting = () => (
   </Environment>
 )
 
-// The rig (rope length, anchor height, card scale) was tuned to look right at this exact pixel
-// height and camera depth — treat this pair as the reference "1:1 zoom" calibration point.
-const REFERENCE_HEIGHT_PX = 520
-const CAMERA_Z = 20
-const CAMERA_FOV_DEG = 20
-const WORLD_UNITS_PER_PX = (2 * CAMERA_Z * Math.tan((CAMERA_FOV_DEG / 2) * (Math.PI / 180))) ** -1
-
-// Must be computed from REFERENCE_HEIGHT_PX, not the live canvas height — the camera dolly
-// below keeps px-per-world-unit pinned to this reference value regardless of canvas size.
-const PX_PER_WORLD_UNIT = REFERENCE_HEIGHT_PX * WORLD_UNITS_PER_PX
-
-// Keeps the resting card anchored a fixed pixel distance from the canvas's right edge
-// regardless of canvas width, by panning the camera to offset the canvas's own drifting center.
-const TARGET_FROM_RIGHT_PX = 240
-
 const CameraAlign = () => {
   useFrame(state => {
-    state.camera.position.x = (TARGET_FROM_RIGHT_PX - state.size.width / 2) / PX_PER_WORLD_UNIT
+    const view = getIdCardView(state.size.width, state.size.height)
 
-    // Vertical FOV is fixed, so a taller canvas alone renders everything bigger (a zoom, not
-    // more visible area). Pushing the camera back proportionally cancels that zoom, so the
-    // card's apparent size stays constant while extra height reveals more world space.
-    state.camera.position.z = CAMERA_Z * (state.size.height / REFERENCE_HEIGHT_PX)
-  })
+    state.camera.position.set(0, 0, view.depth)
+  }, -1)
 
   return null
 }
@@ -501,14 +523,14 @@ const CameraAlign = () => {
 type IdCardProps = {
   frontImage: string
   className?: string
+  dragLabel: string
+  scrollLabel: string
 }
 
-const IdCard = ({ frontImage, className }: IdCardProps) => {
+const IdCard = ({ frontImage, className, dragLabel, scrollLabel }: IdCardProps) => {
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768)
 
-  // A ref (not state) so the server/client difference (no `document` during SSR) never touches
-  // the rendered output and can't cause a hydration mismatch.
-  const eventSourceRef = useRef<HTMLElement | null>(typeof document !== 'undefined' ? document.body : null)
+  const [touchDragEnabled, setTouchDragEnabled] = useState(false)
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768)
@@ -518,45 +540,41 @@ const IdCard = ({ frontImage, className }: IdCardProps) => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // pointer-events-none so this wrapper (sized to cover the drag range, not just the resting
-  // card) never blocks clicks on page content it visually overlaps — drag/click on the card
-  // itself still works because Canvas's `eventSource` listens on document.body instead.
   return (
-    <div className={cn('pointer-events-none drop-shadow-xl', className)}>
-      <Canvas
-        eventSource={eventSourceRef as RefObject<HTMLElement>}
-        camera={{ position: [0, 0, 20], fov: 20 }}
-        dpr={[1, isMobile ? 1.25 : 1.5]}
-        gl={{ alpha: true, antialias: true, powerPreference: 'default' }}
-        onCreated={state => {
-          state.gl.setClearColor(new THREE.Color(0x000000), 0)
-
-          // Without this, a lost WebGL context never recovers — the canvas stays blank forever
-          // instead of the browser being allowed to restore it.
-          state.gl.domElement.addEventListener('webglcontextlost', event => event.preventDefault())
-
-          // eventSource routes events through document.body (so this oversized, mostly-empty
-          // canvas doesn't block clicks on overlapped page content), so pointer NDC must be
-          // computed from the canvas's own bounding rect rather than r3f's default clientX/Y.
-          state.setEvents({
-            compute: (event, s) => {
-              const rect = s.gl.domElement.getBoundingClientRect()
-              const x = event.clientX - rect.left
-              const y = event.clientY - rect.top
-
-              s.pointer.set((x / s.size.width) * 2 - 1, -(y / s.size.height) * 2 + 1)
-              s.raycaster.setFromCamera(s.pointer, s.camera)
-            }
-          })
-        }}
+    <div className={cn('drop-shadow-xl', className)}>
+      <div
+        className='h-120 w-full select-none sm:h-140'
+        style={{ touchAction: touchDragEnabled ? 'none' : 'pan-y pinch-zoom' }}
       >
-        <CameraAlign />
-        <ambientLight intensity={Math.PI} />
-        <Physics gravity={[0, -40, 0]} timeStep={isMobile ? 1 / 30 : 1 / 60}>
-          <Band frontImage={frontImage} isMobile={isMobile} />
-        </Physics>
-        <StudioLighting />
-      </Canvas>
+        <Canvas
+          style={{ touchAction: touchDragEnabled ? 'none' : 'pan-y pinch-zoom' }}
+          camera={{ position: [0, 0, 20], fov: 20 }}
+          dpr={[1, isMobile ? 1.25 : 1.5]}
+          gl={{ alpha: true, antialias: true, powerPreference: 'default' }}
+          onCreated={state => {
+            state.gl.setClearColor(new THREE.Color(0x000000), 0)
+
+            // Without this, a lost WebGL context never recovers — the canvas stays blank forever
+            // instead of the browser being allowed to restore it.
+            state.gl.domElement.addEventListener('webglcontextlost', event => event.preventDefault())
+          }}
+        >
+          <CameraAlign />
+          <ambientLight intensity={Math.PI} />
+          <Physics gravity={[0, -40, 0]} timeStep={isMobile ? 1 / 30 : 1 / 60}>
+            <Band frontImage={frontImage} isMobile={isMobile} touchDragEnabled={touchDragEnabled} />
+          </Physics>
+          <StudioLighting />
+        </Canvas>
+      </div>
+      <button
+        type='button'
+        aria-pressed={touchDragEnabled}
+        onClick={() => setTouchDragEnabled(value => !value)}
+        className='bg-background mx-auto block rounded-full border px-4 py-2 text-sm lg:hidden [@media(any-pointer:coarse)]:block'
+      >
+        {touchDragEnabled ? scrollLabel : dragLabel}
+      </button>
     </div>
   )
 }
