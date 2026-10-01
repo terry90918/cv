@@ -9,6 +9,7 @@ import Image from 'next/image'
 // Utils Imports
 import { isIdCardHover } from '@/lib/id-card-cursor'
 import { cn } from '@/lib/utils'
+import { assetPath } from '@/lib/site'
 
 const CURSOR_INTERACTIVE_SELECTOR =
   'a, button, [role="button"], input, textarea, select, label, summary, [data-cursor="pointer"]'
@@ -69,7 +70,7 @@ const CustomCursor = () => {
       )}
     >
       <Image
-        src={isPointer ? '/images/cursor/cursor-pointer.webp' : '/images/cursor/cursor.webp'}
+        src={assetPath(isPointer ? '/images/cursor/cursor-pointer.webp' : '/images/cursor/cursor.webp')}
         alt=''
         width={52}
         height={52}
