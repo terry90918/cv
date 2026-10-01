@@ -1,13 +1,13 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  basePath: process.env.BASEPATH ?? '',
+  output: 'export',
+  trailingSlash: true,
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? '',
   reactStrictMode: true,
   devIndicators: false,
   pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
-  async redirects() {
-    return [{ source: '/', destination: '/zh-TW', permanent: false }]
-  }
+  images: { unoptimized: true }
 }
 
 export default nextConfig

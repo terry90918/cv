@@ -1,3 +1,5 @@
+import { assetPath, basePath } from './site.ts'
+
 export const locales = ['zh-TW', 'en'] as const
 
 export type Locale = (typeof locales)[number]
@@ -12,7 +14,7 @@ export const contact = {
   phoneHref: 'tel:+886931206500',
   github: 'https://github.com/terry90918',
   linkedin: 'https://www.linkedin.com/in/%E5%A4%A9%E4%B8%80-%E9%99%B3-98812812a/',
-  photo: '/images/profile/tien-yi-chen.png'
+  photo: assetPath('/images/profile/tien-yi-chen.png')
 }
 
 export const profiles = {
@@ -447,6 +449,9 @@ export const profiles = {
 export type Profile = typeof profiles.en
 
 export function localeHref(pathname: string, locale: Locale, hash = ''): string {
+  const path = basePath && pathname.startsWith(`${basePath}/`) ? pathname.slice(basePath.length) : pathname
+  const localizedPath = path === '/' || path === '' ? '/zh-TW' : path
+
   const chapters = [
     ['背景與需求', 'context-requirements'],
     ['我的角色', 'my-role'],
@@ -462,5 +467,5 @@ export function localeHref(pathname: string, locale: Locale, hash = ''): string 
 
   const anchor = chapter ? chapter[locale === 'en' ? 1 : 0] : fragment
 
-  return pathname.replace(/^\/(zh-TW|en)(?=\/|$)/, `/${locale}`) + (anchor ? `#${anchor}` : '')
+  return localizedPath.replace(/^\/(zh-TW|en)(?=\/|$)/, `/${locale}`) + (anchor ? `#${anchor}` : '')
 }

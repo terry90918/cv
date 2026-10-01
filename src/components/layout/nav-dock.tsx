@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils'
 const sectionIds = ['about', 'featured-works', 'experience', 'skills', 'contact']
 
 export default function NavDock({ locale, labels }: { locale: Locale; labels: Profile['labels'] }) {
-  const pathname = usePathname()
+  const pathname = usePathname().replace(/\/$/, '') || `/${locale}`
   const activeId = useActiveSection(sectionIds, pathname)
   const [fragment, setFragment] = useState('')
   const router = useRouter()

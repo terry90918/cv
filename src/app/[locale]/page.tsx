@@ -19,7 +19,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
     name: profile.name,
     alternateName: locale === 'en' ? '陳天一' : 'Tien Yi Chen',
     url: `${siteUrl}/${locale}`,
-    image: `${siteUrl}${contact.photo}`,
+    image: new URL(contact.photo, siteUrl).href,
     sameAs: [contact.github, contact.linkedin],
     knowsAbout: profile.skills.map(skill => skill.title)
   }

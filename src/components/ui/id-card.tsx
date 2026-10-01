@@ -30,8 +30,9 @@ import type { RapierRigidBody, RigidBodyProps } from '@react-three/rapier'
 // Util Imports
 import { setIdCardHover } from '@/lib/id-card-cursor'
 import { cn } from '@/lib/utils'
+import { assetPath } from '@/lib/site'
 
-const CARD_MODEL_URL = '/models/lanyard/card.glb'
+const CARD_MODEL_URL = assetPath('/models/lanyard/card.glb')
 
 // Real cylindrical radius for the rope's TubeGeometry, not a flat "line width" — a genuine tube
 // mesh catches light like a real cord, unlike a flat camera-facing ribbon.
@@ -54,7 +55,7 @@ const ROPE_TOP_EXTENSION = -0.5
 
 // public/images/3d-card/pin.webp — a cutout of the actual pin hardware, rendered as a
 // camera-facing plane instead of procedural geometry (see the `pinTexture` comment in `Band`).
-const PIN_IMAGE_URL = '/images/3d-card/pin.webp'
+const PIN_IMAGE_URL = assetPath('/images/3d-card/pin.webp')
 
 // Source image is 1024×1536px with the opaque pin content padded unevenly inside it. Only the
 // bottom padding fraction is needed, so PIN_PLANE_Y can auto-derive from PIN_PLANE_HEIGHT —
