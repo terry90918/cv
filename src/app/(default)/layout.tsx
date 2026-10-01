@@ -5,6 +5,6 @@ import { pageMetadata } from '@/lib/metadata'
 
 export const metadata = pageMetadata('zh-TW')
 
-export default function DefaultLayout({ children }: { children: ReactNode }) {
+export default async function DefaultLayout({ children }: { children: ReactNode }) {
   return LocaleLayout({ children, params: Promise.resolve({ locale: 'zh-TW' }) })
 }

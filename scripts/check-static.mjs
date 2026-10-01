@@ -12,6 +12,7 @@ for (const locale of ['zh-TW', 'en']) {
 
     assert.match(html, new RegExp(`lang="${locale}"`))
     assert.ok(html.includes(`${prefix}/images/profile/tien-yi-chen.png`) || page.startsWith('case-study/'))
+    assert.ok(html.includes(`${prefix}/_next/`))
     assert.doesNotMatch(html, /http:\/\/localhost:3000/)
   }
 }

@@ -17,6 +17,8 @@ jobs:
       NEXT_PUBLIC_APP_URL: https://terry90918.github.io/cv
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: pnpm/action-setup@v4
         with:
           version: 11.19.0
