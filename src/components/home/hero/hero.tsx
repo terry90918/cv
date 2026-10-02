@@ -9,8 +9,8 @@ import type { Locale, Profile } from '@/lib/profile'
 
 export default function Hero({ locale, profile }: { locale: Locale; profile: Profile }) {
   return (
-    <section id='top' className='border-b lg:grid lg:grid-cols-2 lg:items-center'>
-      <div className='min-w-0 pt-24 pb-8 sm:py-16 lg:pt-32 lg:pb-24'>
+    <section id='top' className='lg:relative'>
+      <div className='border-b pt-24 pb-12 sm:py-16 lg:pt-32 lg:pb-24'>
         <div className='px-4 sm:px-6 lg:px-10.5'>
           <div className='space-y-6 lg:max-w-lg'>
             <Badge variant='outline' className='bg-card gap-2 rounded-full px-3 py-1 text-xs shadow-sm'>
@@ -47,9 +47,7 @@ export default function Hero({ locale, profile }: { locale: Locale; profile: Pro
       </div>
       <IdCard
         frontImage={contact.photo}
-        dragLabel={locale === 'zh-TW' ? '拖曳吊牌' : 'Drag badge'}
-        scrollLabel={locale === 'zh-TW' ? '繼續捲動' : 'Resume scrolling'}
-        className='mx-auto w-full max-w-lg min-w-0 px-4 pb-8 sm:px-6 lg:px-0 lg:pt-16'
+        className='mx-auto mt-8 aspect-4/5 w-full max-w-80 max-lg:hidden lg:absolute lg:-top-31 lg:right-0 lg:left-0 lg:z-10 lg:mt-0 lg:aspect-auto lg:h-192 lg:max-w-none'
       />
     </section>
   )

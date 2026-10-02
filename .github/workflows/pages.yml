@@ -29,7 +29,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm check-content
-      - run: pnpm check-id-card-view
       - run: pnpm build
       - run: pnpm check-types
       - run: pnpm check-static

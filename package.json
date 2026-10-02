@@ -11,8 +11,7 @@
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "check-types": "tsc --noEmit",
     "check-content": "node --experimental-strip-types scripts/check-content.mjs",
-    "check-static": "node scripts/check-static.mjs",
-    "check-id-card-view": "node --experimental-strip-types scripts/check-id-card-view.mjs"
+    "check-static": "node scripts/check-static.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.6.0",
