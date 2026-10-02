@@ -23,12 +23,11 @@ import * as THREE from 'three'
 import { useTheme } from 'next-themes'
 import { Canvas, useFrame } from '@react-three/fiber'
 import type { ThreeEvent } from '@react-three/fiber'
-import { Environment, Lightformer, useGLTF, useTexture } from '@react-three/drei'
+import { Environment, Lightformer, useCursor, useGLTF, useTexture } from '@react-three/drei'
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint } from '@react-three/rapier'
 import type { RapierRigidBody, RigidBodyProps } from '@react-three/rapier'
 
 // Util Imports
-import { setIdCardHover } from '@/lib/id-card-cursor'
 import { cn } from '@/lib/utils'
 import { assetPath } from '@/lib/site'
 
@@ -308,6 +307,10 @@ const Band = ({ frontImage, isMobile }: BandProps) => {
   })
 
   const [dragged, drag] = useState<THREE.Vector3 | false>(false)
+  const [hovered, setHovered] = useState(false)
+
+  useCursor(hovered && !dragged, 'grab', 'auto')
+  useCursor(Boolean(dragged), 'grabbing', 'auto')
 
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 0.85])
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 0.85])
@@ -400,8 +403,8 @@ const Band = ({ frontImage, isMobile }: BandProps) => {
               // text-selection drag on whatever it passes over.
               document.body.style.userSelect = 'none'
             }}
-            onPointerOver={() => setIdCardHover(true)}
-            onPointerOut={() => setIdCardHover(false)}
+            onPointerOver={() => setHovered(true)}
+            onPointerOut={() => setHovered(false)}
           >
             <mesh geometry={nodes.card.geometry}>
               <meshBasicMaterial map={cardMap} toneMapped={false} />
