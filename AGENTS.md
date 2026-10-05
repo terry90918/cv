@@ -7,6 +7,14 @@
 - Prefer the GitHub plugin for repository operations, Woodpecker API for repositories using Woodpecker, and the Coolify and Hetzner plugins for their resources. This repository's CI is GitHub Actions (`.github/workflows/pages.yml`).
 - Make changes in an isolated worktree on a `codex/` branch and deliver through a PR. Keep the primary `main` checkout clean; update it with `git pull --ff-only` after an authorized merge.
 
+## JT Harness workflow
+
+Use JT Harness for every software task. Read the `using-jt-harness` skill at task start when it is available. If it is unavailable, follow this local checklist:
+
+- Before editing, find and read the matching Linear issue; if none exists, create one in the relevant team, set it to In Progress, and record a concise start note. Skip per-step status comments.
+- At completion, record the result, PR, review outcomes, required checks, merge state, and runtime readback when applicable. Mark the issue Done only after its acceptance criteria are verified.
+- Before an authorized merge, complete one Codex review and one CodeRabbit review, run full-project lint on the current head, and confirm required checks pass and GitHub reports the PR mergeable. Follow the current task's merge and publication boundaries.
+
 ## Before editing
 
 Read [README.md](README.md) for setup, routes, content ownership, validation, and deployment. Inspect `package.json` and the affected source files before choosing commands or changing behavior. Reuse existing components, helpers, and dependencies.
