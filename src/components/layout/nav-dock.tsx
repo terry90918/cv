@@ -13,7 +13,7 @@ import { localeHref } from '@/lib/profile'
 import type { Locale, Profile } from '@/lib/profile'
 import { cn } from '@/lib/utils'
 
-const sectionIds = ['about', 'featured-works', 'experience', 'skills', 'contact']
+const sectionIds = ['about', 'featured-works', 'experience', 'contact', 'skills']
 
 export default function NavDock({ locale, labels }: { locale: Locale; labels: Profile['labels'] }) {
   const pathname = usePathname().replace(/\/$/, '') || `/${locale}`
@@ -26,8 +26,8 @@ export default function NavDock({ locale, labels }: { locale: Locale; labels: Pr
     { id: 'about', label: labels.about, Icon: UserRound },
     { id: 'featured-works', label: labels.work, Icon: FolderOpen },
     { id: 'experience', label: labels.experience, Icon: BriefcaseBusiness },
-    { id: 'skills', label: labels.skills, Icon: Sparkles },
-    { id: 'contact', label: labels.contact, Icon: Mail }
+    { id: 'contact', label: labels.contact, Icon: Mail },
+    { id: 'skills', label: labels.skills, Icon: Sparkles }
   ]
 
   const linkClass =

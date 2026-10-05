@@ -15,7 +15,7 @@ Read [README.md](README.md) for setup, routes, content ownership, validation, an
 
 - Treat `src/lib/profile.ts` as the shared source for profiles, contact information, locale helpers, and project order. Update both languages together.
 - Keep one matching MDX file per registered slug in each locale directory. When changing the case list, align `projectSlugs` and `scripts/check-static.mjs`; when changing headings, inspect `localeHref` in `profile.ts` and `src/lib/extract-headings.ts` for language-switch anchor mappings.
-- Ground career claims in the supplied résumé and LinkedIn sources. Preserve the distinction between personal contributions, sampled test results, and later platform outcomes.
+- Ground résumé claims in the supplied Notion résumé, the sole authoritative content source. Preserve the distinction between personal contributions, sampled test results, and later platform outcomes.
 - Preserve static export, both locales, and `/cv` deployment paths. Use `assetPath` from `src/lib/site.ts` for public assets; use localized Next.js links for internal routes. Keep MDX loading at build time.
 
 ## Verification and delivery

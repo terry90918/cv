@@ -8,48 +8,161 @@ export const isLocale = (value: string): value is Locale => locales.some(locale 
 
 export const projectSlugs = ['jurislm', 'nidin', 'vclass', 'gj', 'channel-t', 'backlight-memory'] as const
 
+const skillItem = (zhTw: string, en: string) => ({ 'zh-TW': zhTw, en })
+
+const skillGroups = [
+  { title: { 'zh-TW': '程式語言', en: 'Programming languages' }, tags: ['JavaScript', 'TypeScript', 'PHP', 'Java'] },
+  {
+    title: { 'zh-TW': '網頁基礎', en: 'Web fundamentals' },
+    tags: ['HTML', 'CSS', skillItem('語意化標記', 'Semantic markup'), 'DOM', skillItem('瀏覽器 API', 'Browser APIs')]
+  },
+  {
+    title: { 'zh-TW': '前端框架與函式庫', en: 'Frontend frameworks and libraries' },
+    tags: ['Vue.js', 'React.js', 'Angular', 'jQuery']
+  },
+  { title: { 'zh-TW': '應用框架', en: 'Application frameworks' }, tags: ['Nuxt', 'Next.js'] },
+  { title: { 'zh-TW': '後端框架', en: 'Backend frameworks' }, tags: ['FastAPI', 'Laravel'] },
+  {
+    title: { 'zh-TW': 'AI 應用框架', en: 'AI application frameworks' },
+    tags: ['LangChain', 'LangGraph', 'LlamaIndex', 'Haystack', 'Semantic Kernel']
+  },
+  {
+    title: { 'zh-TW': '多代理框架', en: 'Multi-agent frameworks' },
+    tags: ['AutoGen', 'CrewAI', 'OpenAI Agents SDK']
+  },
+  {
+    title: { 'zh-TW': 'AI 開發 SDK', en: 'AI development SDKs' },
+    tags: ['OpenAI SDK', 'Anthropic SDK', 'Vercel AI SDK']
+  },
+  {
+    title: { 'zh-TW': '模型與推論工具', en: 'Model and inference tools' },
+    tags: ['Hugging Face Transformers', 'Ollama', 'vLLM']
+  },
+  {
+    title: { 'zh-TW': '向量資料庫／檢索工具', en: 'Vector databases and retrieval tools' },
+    tags: ['Qdrant', 'Milvus', 'Weaviate', 'Chroma', 'FAISS', 'pgvector']
+  },
+  {
+    title: { 'zh-TW': '評估與追蹤工具', en: 'Evaluation and tracing tools' },
+    tags: ['LangSmith', 'Langfuse', 'Ragas', 'DeepEval', 'Promptfoo']
+  },
+  {
+    title: { 'zh-TW': '樣式與 UI', en: 'Styling and UI' },
+    tags: [
+      skillItem('Sass／SCSS', 'Sass/SCSS'),
+      'Tailwind CSS',
+      'Bootstrap',
+      'CSS Modules',
+      skillItem('元件庫', 'Component libraries'),
+      'Design System'
+    ]
+  },
+  {
+    title: { 'zh-TW': '狀態管理', en: 'State management' },
+    tags: ['Pinia', 'Vuex', 'Redux', 'Zustand', 'TanStack Query']
+  },
+  { title: { 'zh-TW': '路由', en: 'Routing' }, tags: ['Vue Router', 'React Router'] },
+  { title: { 'zh-TW': '建置工具', en: 'Build tools' }, tags: ['Vite', 'Webpack', 'Babel', 'Rollup'] },
+  { title: { 'zh-TW': '套件管理', en: 'Package management' }, tags: ['npm', 'pnpm', 'Yarn'] },
+  { title: { 'zh-TW': '執行環境', en: 'Runtimes' }, tags: ['Node.js', 'Bun'] },
+  { title: { 'zh-TW': '資料庫', en: 'Databases' }, tags: ['Microsoft SQL Server'] },
+  {
+    title: { 'zh-TW': 'API 與即時通訊', en: 'APIs and real-time communication' },
+    tags: ['REST API', 'GraphQL', 'WebSocket', 'SSE']
+  },
+  {
+    title: { 'zh-TW': '測試工具', en: 'Testing tools' },
+    tags: ['Vitest', 'Jest', 'Testing Library', 'Playwright', 'Cypress']
+  },
+  {
+    title: { 'zh-TW': '程式碼品質', en: 'Code quality' },
+    tags: ['ESLint', 'Prettier', skillItem('型別檢查', 'Type checking'), 'Code Review']
+  },
+  { title: { 'zh-TW': '版本控制', en: 'Version control' }, tags: ['Git'] },
+  {
+    title: { 'zh-TW': '程式碼託管平台', en: 'Code hosting platforms' },
+    tags: ['GitHub', 'GitLab']
+  },
+  {
+    title: { 'zh-TW': '持續整合與部署', en: 'Continuous integration and deployment' },
+    tags: ['GitHub Actions', 'GitLab CI', 'Jenkins']
+  },
+  { title: { 'zh-TW': '容器工具', en: 'Container tools' }, tags: ['Docker'] },
+  {
+    title: { 'zh-TW': '雲端平台', en: 'Cloud platforms' },
+    tags: ['Google Cloud Platform', 'AWS', 'Azure']
+  },
+  {
+    title: { 'zh-TW': '部署平台', en: 'Deployment platforms' },
+    tags: ['Vercel', 'Netlify', 'Cloudflare']
+  },
+  {
+    title: { 'zh-TW': '效能與監控', en: 'Performance and monitoring' },
+    tags: ['Chrome DevTools', 'Lighthouse', 'Core Web Vitals', 'Sentry', 'Google Analytics']
+  },
+  {
+    title: { 'zh-TW': '前端實務', en: 'Frontend practices' },
+    tags: [
+      skillItem('響應式設計', 'Responsive design'),
+      skillItem('無障礙設計', 'Accessibility'),
+      'SEO',
+      skillItem('SSR／SSG', 'SSR/SSG'),
+      'PWA',
+      skillItem('跨瀏覽器相容', 'Cross-browser compatibility'),
+      skillItem('前端安全', 'Frontend security')
+    ]
+  },
+  { title: { 'zh-TW': '設計工具', en: 'Design tools' }, tags: ['Figma', 'Storybook'] },
+  {
+    title: { 'zh-TW': '協作工具', en: 'Collaboration tools' },
+    tags: ['Notion', 'Slack', 'Jira', 'Linear']
+  }
+] as const
+
+const skillsFor = (locale: Locale) =>
+  skillGroups.map(({ title, tags }) => ({
+    title: title[locale],
+    tags: tags.map(tag => (typeof tag === 'string' ? tag : tag[locale]))
+  }))
+
 export const contact = {
   email: 'zxtw17985321@gmail.com',
   phone: '+886 931206500',
   phoneHref: 'tel:+886931206500',
   github: 'https://github.com/terry90918',
-  linkedin: 'https://www.linkedin.com/in/%E5%A4%A9%E4%B8%80-%E9%99%B3-98812812a/',
+  linkedin: 'https://www.linkedin.com/in/tien-yi-chen-98812812a/',
+  website: 'https://terry90918.github.io/cv/',
   photo: assetPath('/images/profile/tien-yi-chen.png')
 }
 
 export const profiles = {
   'zh-TW': {
     name: '陳天一',
-    role: '應用 AI 工程',
+    role: '自由工作者',
     greeting: '你好，我是',
     location: '台灣・新竹縣竹北市',
-    description:
-      '將複雜需求整理成可執行的產品與系統。從法律 AI、餐飲點餐到教育平台，參與產品規劃、全端開發、資料流程與團隊交付。',
-    about: [
-      '我喜歡釐清複雜需求，建立容易使用的網站，以及團隊能理解、維護的系統架構。',
-      '好的產品除了完成上線，也需要讓人願意持續使用，讓團隊能有信心地持續改善。從寫程式到帶領團隊，我最在意的是和不同的人找到問題的核心，再用合適的技術解決。'
-    ],
+    description: '',
     labels: {
-      about: '關於我',
-      work: '代表專案',
+      about: '履歷重點',
+      work: '專案經歷',
       experience: '工作經歷',
-      skills: '專業能力',
-      contact: '聯絡我',
+      skills: '技能',
+      contact: '聯絡方式',
       contactDetails: '完整聯絡方式',
       theme: '切換深淺色',
       language: '切換語言',
       viewExperience: '查看經歷',
-      aboutTitle: '把需求變成可以使用的產品',
-      workTitle: '從問題到交付的實際經驗',
-      experienceTitle: '一路累積的產品與工程經驗',
-      skillsTitle: '我帶進團隊的能力',
+      aboutTitle: '經歷數據',
+      workTitle: '履歷中的專案',
+      experienceTitle: '經歷一覽',
+      skillsTitle: '技能分類',
       education: '學歷',
       military: '兵役',
-      contactTitle: '從一個值得解決的問題開始',
-      contactDescription: '歡迎透過 Email 或 LinkedIn 聯繫，聊聊產品、工程與合作的可能。',
+      contactTitle: '聯絡方式',
+      contactDescription: '',
       backHome: '返回首頁',
       otherWork: '其他專案',
-      otherWorkTitle: '繼續了解我的工作',
+      otherWorkTitle: '其他專案',
       organisation: '組織',
       responsibility: '負責範圍',
       period: '專案期間',
@@ -61,7 +174,8 @@ export const profiles = {
       notFoundDescription: '這個網址目前沒有對應的內容。',
       email: '電子郵件',
       phone: '電話',
-      location: '所在地'
+      location: '所在地',
+      website: '個人網站'
     },
     stats: [
       {
@@ -81,34 +195,13 @@ export const profiles = {
         label: '直接管理的工程團隊人數'
       }
     ],
-    skills: [
-      {
-        title: '應用 AI 與資料流程',
-        description: '以法律問答、合約審閱與旅遊商品建檔等需求為起點，整合資料擷取、混合檢索、工具與認證。',
-        tags: ['混合搜尋', 'MCP', 'PDF 與圖片處理']
-      },
-      {
-        title: '平台架構與系統整合',
-        description: '整合會員、訂單、行銷與付款流程；設計尖峰流量控管、排程佇列及多品牌產品模組。',
-        tags: ['API 整合', 'LINE Mini App', 'POS 與支付']
-      },
-      {
-        title: '產品開發與交付',
-        description: '從需求拆解、架構規劃到網站與行動端交付，讓產品能從構想到實際上線並持續迭代。',
-        tags: ['全端開發', '跨端流程', '電商與教育']
-      },
-      {
-        title: '工程團隊與品質',
-        description: '帶領工程團隊，建立文件與敏捷協作流程，參與招募、績效考核、無障礙規範與資安工作。',
-        tags: ['團隊管理', '敏捷開發', '資安與無障礙']
-      }
-    ],
+    skills: skillsFor('zh-TW'),
     experiences: [
       {
-        company: '獨立合作案',
+        company: '',
         role: '自由工作者',
-        period: '2025.06–2026.09',
-        kind: '合作案',
+        period: '',
+        kind: '',
         team: '',
         bullets: [],
         projects: [
@@ -123,14 +216,14 @@ export const profiles = {
           },
           {
             name: '逆光記憶／藍穎餐飲',
-            period: '2026.04–2026.08',
+            period: '2026.04–2026.08・4 個月',
             bullets: [
               '獨立建置品牌直營電商，整合產品內容、會員、線上訂購及營運後台，協助甜點品牌建立自有數位銷售通路。'
             ]
           },
           {
             name: 'Channel-T／途銳資訊',
-            period: '2025.06–2025.10',
+            period: '2025.06–2025.10・5 個月',
             bullets: [
               '建立 Channel-T 旅遊產品平台，透過 API 串接多家旅行社系統，自動同步行程、價格與出團資訊，減少重複建檔。',
               '建立 AI 商品建檔流程，將 PDF 與圖片轉為可搜尋、可發布的行程頁，並提供品牌官網與行程推薦；平台後續公開成果顯示，行程頁建置約 30 秒、行政效率提升逾 80%。'
@@ -139,10 +232,10 @@ export const profiles = {
         ]
       },
       {
-        company: '雲仲資訊／Howsense',
+        company: '雲仲資訊',
         role: '技術經理',
         period: '2021.05–2025.06',
-        kind: '全職',
+        kind: '全職・4 年 2 個月',
         team: '直接管理 10 人',
         projects: [],
         bullets: [
@@ -156,10 +249,10 @@ export const profiles = {
         ]
       },
       {
-        company: '昕力資訊／TPIsoftware',
+        company: '昕力資訊',
         role: '主任工程師',
         period: '2020.02–2021.04',
-        kind: '全職',
+        kind: '全職・1 年 3 個月',
         team: '管理 20 人',
         projects: [],
         bullets: [
@@ -171,10 +264,10 @@ export const profiles = {
         ]
       },
       {
-        company: '紅點子科技／VoiceTube',
+        company: '紅點子科技',
         role: '資深軟體工程師',
         period: '2019.05–2020.02',
-        kind: '全職',
+        kind: '全職・10 個月',
         team: '',
         projects: [],
         bullets: [
@@ -184,10 +277,10 @@ export const profiles = {
         ]
       },
       {
-        company: '歐克斯科技／Ubee',
+        company: '歐克斯科技',
         role: '資深軟體工程師',
         period: '2018.06–2019.05',
-        kind: '全職',
+        kind: '全職・1 年',
         team: '',
         projects: [],
         bullets: [
@@ -197,10 +290,10 @@ export const profiles = {
         ]
       },
       {
-        company: '幹得好科技／GJ',
-        role: '軟體工程師・共同創辦人',
+        company: '幹得好科技',
+        role: '軟體工程師',
         period: '2018.02–2018.06',
-        kind: '全職',
+        kind: '全職・5 個月',
         team: '',
         projects: [],
         bullets: [
@@ -212,7 +305,7 @@ export const profiles = {
         company: '聖恩全生涯',
         role: '軟體工程師',
         period: '2014.10–2017.11',
-        kind: '全職',
+        kind: '全職・3 年 2 個月',
         team: '',
         projects: [],
         bullets: [
@@ -231,36 +324,31 @@ export const profiles = {
   },
   en: {
     name: 'Tien Yi Chen',
-    role: 'Applied AI Engineering',
+    role: 'Freelancer',
     greeting: 'Hello, I’m',
     location: 'Zhubei, Hsinchu County, Taiwan',
-    description:
-      'I turn complex requirements into products and systems people can use and teams can maintain. My work spans applied AI, commerce, learning platforms, and engineering leadership.',
-    about: [
-      'I enjoy bringing clarity to complex requirements, building websites that feel easy to use, and designing architectures that teams can understand and maintain.',
-      'A good product should be something people want to use and something the team can keep improving with confidence. From writing code to leading teams, I enjoy working with different people to find the heart of a problem and solve it with the right technology.'
-    ],
+    description: '',
     labels: {
-      about: 'About',
-      work: 'Selected work',
+      about: 'Career highlights',
+      work: 'Projects',
       experience: 'Experience',
-      skills: 'Capabilities',
-      contact: 'Contact me',
+      skills: 'Skills',
+      contact: 'Contact',
       contactDetails: 'Contact details',
       theme: 'Toggle theme',
       language: 'Switch language',
       viewExperience: 'View experience',
-      aboutTitle: 'Turning requirements into useful products',
-      workTitle: 'Real problems. Real delivery.',
-      experienceTitle: 'The products and teams along the way',
-      skillsTitle: 'What I bring to a team',
+      aboutTitle: 'Experience metrics',
+      workTitle: 'Projects from my résumé',
+      experienceTitle: 'Work history overview',
+      skillsTitle: 'Skills by category',
       education: 'Education',
       military: 'Military service',
-      contactTitle: 'Start with a problem worth solving',
-      contactDescription: 'Reach out by email or LinkedIn to discuss products, engineering, or collaboration.',
+      contactTitle: 'Contact details',
+      contactDescription: '',
       backHome: 'Back to home',
       otherWork: 'Other projects',
-      otherWorkTitle: 'Explore more of my work',
+      otherWorkTitle: 'Other projects',
       organisation: 'Organisation',
       responsibility: 'Responsibility',
       period: 'Project period',
@@ -272,7 +360,8 @@ export const profiles = {
       notFoundDescription: 'There is no content at this address.',
       email: 'Email',
       phone: 'Phone',
-      location: 'Location'
+      location: 'Location',
+      website: 'Personal website'
     },
     stats: [
       {
@@ -292,38 +381,13 @@ export const profiles = {
         label: 'Engineers directly managed'
       }
     ],
-    skills: [
-      {
-        title: 'Applied AI & data workflows',
-        description:
-          'Start with practical needs such as legal assistance and travel product creation, then connect ingestion, hybrid retrieval, tools, and authentication.',
-        tags: ['Hybrid search', 'MCP', 'PDF & image processing']
-      },
-      {
-        title: 'Platform architecture & integration',
-        description:
-          'Connect memberships, orders, marketing, and payments with peak traffic controls, scheduled queues, and configurable multi-brand modules.',
-        tags: ['API integration', 'LINE Mini App', 'POS & payments']
-      },
-      {
-        title: 'Product development & delivery',
-        description:
-          'Take requirements through architecture and delivery across web and mobile, from an initial idea to launch and continued iteration.',
-        tags: ['Full-stack development', 'Cross-platform workflows', 'Commerce & learning']
-      },
-      {
-        title: 'Engineering leadership & quality',
-        description:
-          'Lead engineering teams, establish documentation and agile collaboration, and contribute to recruiting, performance reviews, accessibility, and security.',
-        tags: ['Team leadership', 'Agile delivery', 'Security & accessibility']
-      }
-    ],
+    skills: skillsFor('en'),
     experiences: [
       {
-        company: 'Independent projects',
+        company: '',
         role: 'Freelancer',
-        period: '2025.06–2026.09',
-        kind: 'Contract projects',
+        period: '',
+        kind: '',
         team: '',
         bullets: [],
         projects: [
@@ -338,14 +402,14 @@ export const profiles = {
           },
           {
             name: '逆光記憶 / 藍穎餐飲',
-            period: '2026.04–2026.08',
+            period: '2026.04–2026.08 · 4 months',
             bullets: [
               'Independently built a direct-to-consumer commerce platform for a dessert brand, connecting product content, memberships, online ordering, and an operations dashboard.'
             ]
           },
           {
             name: 'Channel-T / 途銳資訊',
-            period: '2025.06–2025.10',
+            period: '2025.06–2025.10 · 5 months',
             bullets: [
               'Built a travel product platform that integrates multiple travel agencies through APIs and automatically synchronises itineraries, prices, and departure information.',
               'Built an AI product creation workflow that converts PDFs and images into searchable, publishable itinerary pages, alongside branded websites and recommendations. Later public platform results reported about 30 seconds per itinerary page and over 80% improvement in administrative efficiency.'
@@ -354,10 +418,10 @@ export const profiles = {
         ]
       },
       {
-        company: '雲仲資訊 / Howsense',
+        company: '雲仲資訊',
         role: 'Technical Manager',
         period: '2021.05–2025.06',
-        kind: 'Full-time',
+        kind: 'Full-time · 4 years 2 months',
         team: '10 direct reports',
         bullets: [
           'Led peak traffic architecture for Nidin, a multi-brand ordering platform. Batched promotional coupons through scheduled queues and API traffic controls to protect order services. The platform supported 8.2 million members and over 15 million orders annually.',
@@ -371,10 +435,10 @@ export const profiles = {
         projects: []
       },
       {
-        company: '昕力資訊 / TPIsoftware',
+        company: '昕力資訊',
         role: 'Principal Engineer',
         period: '2020.02–2021.04',
-        kind: 'Full-time',
+        kind: 'Full-time · 1 year 3 months',
         team: 'Managed 20 engineers',
         bullets: [
           'Led integration and enhancement of the Archives Management Information System for the National Archives Administration, National Development Council. Led a 20-person team to deliver an NT$18 million project.',
@@ -386,10 +450,10 @@ export const profiles = {
         projects: []
       },
       {
-        company: '紅點子科技 / VoiceTube',
+        company: '紅點子科技',
         role: 'Senior Software Engineer',
         period: '2019.05–2020.02',
-        kind: 'Full-time',
+        kind: 'Full-time · 10 months',
         team: '',
         bullets: [
           'Took a core role in building VClass from zero to launch, integrating course presales, instructor collaboration, payments, and digital learning delivery so instructors could validate demand before launching courses.',
@@ -399,10 +463,10 @@ export const profiles = {
         projects: []
       },
       {
-        company: '歐克斯科技 / Ubee',
+        company: '歐克斯科技',
         role: 'Senior Software Engineer',
         period: '2018.06–2019.05',
-        kind: 'Full-time',
+        kind: 'Full-time · 1 year',
         team: '',
         bullets: [
           'Contributed to Ubee, a housing price comparison platform combining real estate websites and government open data to search and compare hundreds of thousands of listings.',
@@ -412,10 +476,10 @@ export const profiles = {
         projects: []
       },
       {
-        company: '幹得好科技 / GJ',
-        role: 'Software Engineer & Co-founder',
+        company: '幹得好科技',
+        role: 'Software Engineer',
         period: '2018.02–2018.06',
-        kind: 'Full-time',
+        kind: 'Full-time · 5 months',
         team: '',
         bullets: [
           'Co-founded 幹得好科技 and independently owned product planning, architecture, and full-stack development for GJ Instant Work, launching web, mobile, and cloud services. The team joined the NTU Entrepreneurship Center and exhibited at Meet Taipei.',
@@ -427,7 +491,7 @@ export const profiles = {
         company: '聖恩全生涯',
         role: 'Software Engineer',
         period: '2014.10–2017.11',
-        kind: 'Full-time',
+        kind: 'Full-time · 3 years 2 months',
         team: '',
         bullets: [
           'Helped build the 聖恩生活護照 online store, connecting products, member benefits, cashback, orders, and delivery to support existing physical service locations.',

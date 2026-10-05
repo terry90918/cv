@@ -25,7 +25,9 @@ export default function Hero({ locale, profile }: { locale: Locale; profile: Pro
               <span className='text-accent-ink'>.</span>
             </h1>
             <p className='text-muted-foreground text-xl font-medium sm:text-2xl lg:text-3xl'>{profile.role}</p>
-            <p className='max-w-lg text-base leading-relaxed lg:max-w-105'>{profile.description}</p>
+            {profile.description && (
+              <p className='max-w-lg text-base leading-relaxed lg:max-w-105'>{profile.description}</p>
+            )}
             <div className='flex flex-wrap items-center gap-3 pt-2'>
               <Link
                 href={`/${locale}/#experience`}

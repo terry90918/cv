@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 
-const expected = ['about', 'featured-works', 'experience', 'skills', 'contact']
+const expected = ['about', 'featured-works', 'experience', 'contact', 'skills']
 const origin = 'http://localhost:3000'
 
 for (const locale of ['zh-TW', 'en']) {

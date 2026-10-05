@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-import { ArrowUpRight, Github, Linkedin, Mail, MapPin, Phone } from 'lucide-react'
+import { ArrowUpRight, Github, Globe, Linkedin, Mail, MapPin, Phone } from 'lucide-react'
 
 import FeaturedWorks from '@/components/shared/featured-works/featured-works'
 import Eyebrow from '@/components/shared/eyebrow/eyebrow'
@@ -29,7 +29,13 @@ export default async function Contact({ params }: { params: Promise<{ locale: st
     { label: labels.email, value: contact.email, href: `mailto:${contact.email}`, Icon: Mail },
     { label: labels.phone, value: contact.phone, href: contact.phoneHref, Icon: Phone },
     { label: 'GitHub', value: 'terry90918', href: contact.github, Icon: Github },
-    { label: 'LinkedIn', value: 'Tien Yi Chen', href: contact.linkedin, Icon: Linkedin }
+    { label: 'LinkedIn', value: 'linkedin.com/in/tien-yi-chen-98812812a', href: contact.linkedin, Icon: Linkedin },
+    {
+      label: labels.website,
+      value: contact.website.replace(/^https?:\/\//, '').replace(/\/$/, ''),
+      href: contact.website,
+      Icon: Globe
+    }
   ]
 
   return (
@@ -42,7 +48,9 @@ export default async function Contact({ params }: { params: Promise<{ locale: st
         <h1 className='mt-2 max-w-2xl text-3xl leading-tight font-semibold sm:text-4xl lg:text-5xl'>
           {labels.contactTitle}
         </h1>
-        <p className='text-muted-foreground mt-6 max-w-2xl text-lg'>{labels.contactDescription}</p>
+        {labels.contactDescription && (
+          <p className='text-muted-foreground mt-6 max-w-2xl text-lg'>{labels.contactDescription}</p>
+        )}
         <div className='mt-12 grid items-start gap-8 md:grid-cols-[1fr_280px]'>
           <div className='grid gap-3'>
             {links.map(({ label, value, href, Icon }) => (
