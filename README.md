@@ -1,6 +1,6 @@
 # 陳天一 · Tien Yi Chen
 
-Bilingual CV and portfolio for Applied AI Engineering, built with Next.js 16 App Router, React 19, TypeScript, and Tailwind CSS 4. The site exports static HTML for GitHub Pages; it has no application server or contact-form backend.
+Bilingual résumé and portfolio for 陳天一, with Traditional Chinese and English pages. Built with Next.js 16 App Router, React 19, TypeScript, and Tailwind CSS 4. The site exports static HTML for GitHub Pages; it has no application server or contact-form backend.
 
 [Published site](https://terry90918.github.io/cv/)
 
@@ -33,7 +33,7 @@ Open `http://localhost:3000`. The root renders Traditional Chinese directly. `/z
 
 Edit profile copy in `src/lib/profile.ts` and case studies in both locale directories. Keep the locale structures and case-study filenames aligned. Register new cases in `projectSlugs`; update the export check's slug list when adding or removing a case. The loader follows `projectSlugs` order rather than sorting by frontmatter `order`.
 
-Claims follow the supplied [Notion résumé](https://app.notion.com/p/c364f5ac5c2b82998f9c012ef4765fc5) and [LinkedIn profile](https://www.linkedin.com/in/%E5%A4%A9%E4%B8%80-%E9%99%B3-98812812a/). Keep personal contributions, sample retrieval measurements, and later platform outcomes distinguishable. MDX is compiled at build time and should contain trusted repository content.
+The [Notion résumé](https://app.notion.com/p/c364f5ac5c2b82998f9c012ef4765fc5) is the sole authoritative source for résumé claims. Keep personal contributions, sample retrieval measurements, and later platform outcomes distinguishable. MDX is compiled at build time and should contain trusted repository content.
 
 ## Validation and static build
 

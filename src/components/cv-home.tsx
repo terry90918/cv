@@ -38,13 +38,8 @@ export default function CvHome({
               </p>
             </div>
           </div>
-          <div className='flex flex-col gap-6'>
-            <div className='space-y-4 text-base leading-relaxed'>
-              {profile.about.map(paragraph => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-            </div>
-            <div className='mt-auto grid grid-cols-2 gap-3'>
+          <div className='flex flex-col justify-center'>
+            <div className='grid grid-cols-2 gap-3'>
               {profile.stats.map(stat => (
                 <div key={stat.label} className='bg-card flex flex-col justify-center rounded-2xl border p-5'>
                   <p className='text-accent-ink text-3xl font-semibold tracking-tight'>{stat.value}</p>
@@ -65,7 +60,7 @@ export default function CvHome({
             <details key={skill.title} className='group py-5' open={index === 0}>
               <summary className='flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-medium sm:text-2xl'>
                 <span>
-                  <span className='text-muted-foreground mr-3 text-sm'>0{index + 1}.</span>
+                  <span className='text-muted-foreground mr-3 text-sm'>{String(index + 1).padStart(2, '0')}.</span>
                   {skill.title}
                 </span>
                 <Plus className='text-accent-ink size-5 shrink-0 transition-transform group-open:rotate-45' />
@@ -78,7 +73,6 @@ export default function CvHome({
                     </span>
                   ))}
                 </div>
-                <p className='text-muted-foreground max-w-2xl leading-relaxed'>{skill.description}</p>
               </div>
             </details>
           ))}
