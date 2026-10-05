@@ -52,32 +52,6 @@ export default function CvHome({
       </section>
       <FeaturedWorks locale={locale} caseStudies={projects} eyebrow={labels.work} title={labels.workTitle} />
       <Experience profile={profile} />
-      <section id='skills' className='border-b px-4 py-12 sm:px-6 sm:py-24 lg:px-10.5'>
-        <Eyebrow>{labels.skills}</Eyebrow>
-        <h2 className='mt-2 text-2xl leading-snug font-semibold md:text-3xl lg:text-4xl'>{labels.skillsTitle}</h2>
-        <div className='mt-10 divide-y'>
-          {profile.skills.map((skill, index) => (
-            <details key={skill.title} className='group py-5' open={index === 0}>
-              <summary className='flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-medium sm:text-2xl'>
-                <span>
-                  <span className='text-muted-foreground mr-3 text-sm'>{String(index + 1).padStart(2, '0')}.</span>
-                  {skill.title}
-                </span>
-                <Plus className='text-accent-ink size-5 shrink-0 transition-transform group-open:rotate-45' />
-              </summary>
-              <div className='space-y-4 pt-5 sm:pl-9'>
-                <div className='flex flex-wrap gap-2'>
-                  {skill.tags.map(tag => (
-                    <span key={tag} className='bg-card rounded-full border px-3 py-1 text-xs'>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </details>
-          ))}
-        </div>
-      </section>
       <section id='education' className='border-b px-4 py-12 sm:px-6 sm:py-24 lg:px-10.5'>
         <Eyebrow>{labels.education}</Eyebrow>
         <div className='mt-6 grid gap-6 sm:grid-cols-2'>
@@ -111,6 +85,32 @@ export default function CvHome({
             {labels.contactDetails}
             <ArrowUpRight className='size-4' />
           </Link>
+        </div>
+      </section>
+      <section id='skills' className='border-b px-4 py-12 sm:px-6 sm:py-24 lg:px-10.5'>
+        <Eyebrow>{labels.skills}</Eyebrow>
+        <h2 className='mt-2 text-2xl leading-snug font-semibold md:text-3xl lg:text-4xl'>{labels.skillsTitle}</h2>
+        <div className='mt-10 divide-y'>
+          {profile.skills.map((skill, index) => (
+            <details key={skill.title} className='group py-5' open={index === 0}>
+              <summary className='flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-medium sm:text-2xl'>
+                <span>
+                  <span className='text-muted-foreground mr-3 text-sm'>{String(index + 1).padStart(2, '0')}.</span>
+                  {skill.title}
+                </span>
+                <Plus className='text-accent-ink size-5 shrink-0 transition-transform group-open:rotate-45' />
+              </summary>
+              <div className='space-y-4 pt-5 sm:pl-9'>
+                <div className='flex flex-wrap gap-2'>
+                  {skill.tags.map(tag => (
+                    <span key={tag} className='bg-card rounded-full border px-3 py-1 text-xs'>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </details>
+          ))}
         </div>
       </section>
     </>
