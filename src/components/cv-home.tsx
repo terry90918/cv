@@ -66,7 +66,7 @@ export default function CvHome({
           </div>
         </div>
       </section>
-      <section id='contact' className='min-h-[calc(100svh-6rem)] px-4 py-12 sm:px-6 sm:py-24 lg:px-10.5'>
+      <section id='contact' className='px-4 py-12 sm:px-6 sm:py-24 lg:px-10.5'>
         <Eyebrow>{labels.contact}</Eyebrow>
         <div className='mt-3 flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end'>
           <div>

@@ -35,7 +35,7 @@ const skillGroups = [
     tags: ['OpenAI SDK', 'Anthropic SDK', 'Vercel AI SDK']
   },
   {
-    title: { 'zh-TW': '模型與推論工具', en: 'Models and inference tools' },
+    title: { 'zh-TW': '模型與推論工具', en: 'Model and inference tools' },
     tags: ['Hugging Face Transformers', 'Ollama', 'vLLM']
   },
   {
@@ -49,7 +49,7 @@ const skillGroups = [
   {
     title: { 'zh-TW': '樣式與 UI', en: 'Styling and UI' },
     tags: [
-      'Sass／SCSS',
+      skillItem('Sass／SCSS', 'Sass/SCSS'),
       'Tailwind CSS',
       'Bootstrap',
       'CSS Modules',
@@ -63,11 +63,11 @@ const skillGroups = [
   },
   { title: { 'zh-TW': '路由', en: 'Routing' }, tags: ['Vue Router', 'React Router'] },
   { title: { 'zh-TW': '建置工具', en: 'Build tools' }, tags: ['Vite', 'Webpack', 'Babel', 'Rollup'] },
-  { title: { 'zh-TW': '套件管理', en: 'Package managers' }, tags: ['npm', 'pnpm', 'Yarn'] },
-  { title: { 'zh-TW': '執行環境', en: 'Runtime environments' }, tags: ['Node.js', 'Bun'] },
+  { title: { 'zh-TW': '套件管理', en: 'Package management' }, tags: ['npm', 'pnpm', 'Yarn'] },
+  { title: { 'zh-TW': '執行環境', en: 'Runtimes' }, tags: ['Node.js', 'Bun'] },
   { title: { 'zh-TW': '資料庫', en: 'Databases' }, tags: ['Microsoft SQL Server'] },
   {
-    title: { 'zh-TW': 'API 與即時通訊', en: 'APIs and realtime communication' },
+    title: { 'zh-TW': 'API 與即時通訊', en: 'APIs and real-time communication' },
     tags: ['REST API', 'GraphQL', 'WebSocket', 'SSE']
   },
   {
@@ -106,7 +106,7 @@ const skillGroups = [
       skillItem('響應式設計', 'Responsive design'),
       skillItem('無障礙設計', 'Accessibility'),
       'SEO',
-      'SSR／SSG',
+      skillItem('SSR／SSG', 'SSR/SSG'),
       'PWA',
       skillItem('跨瀏覽器相容', 'Cross-browser compatibility'),
       skillItem('前端安全', 'Frontend security')

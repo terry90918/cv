@@ -30,7 +30,12 @@ export default async function Contact({ params }: { params: Promise<{ locale: st
     { label: labels.phone, value: contact.phone, href: contact.phoneHref, Icon: Phone },
     { label: 'GitHub', value: 'terry90918', href: contact.github, Icon: Github },
     { label: 'LinkedIn', value: 'linkedin.com/in/tien-yi-chen-98812812a', href: contact.linkedin, Icon: Linkedin },
-    { label: labels.website, value: contact.website, href: contact.website, Icon: Globe }
+    {
+      label: labels.website,
+      value: contact.website.replace(/^https?:\/\//, '').replace(/\/$/, ''),
+      href: contact.website,
+      Icon: Globe
+    }
   ]
 
   return (
